@@ -14,6 +14,7 @@
     "https": "^1.0.0",
     "node": "^17.7.2",
     "querystring": "^0.2.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "typescript": "^4.7.4"
   }
 }
