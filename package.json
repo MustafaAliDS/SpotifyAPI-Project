@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "build": "rimraf dist && tsc",
+    "tsc": "tsc --noEmit --emitDeclarationOnly false",
+    "build": "rimraf dist && npm run tsc",
     "preserve": "npm run build",
     "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "prestart": "npm run build",
