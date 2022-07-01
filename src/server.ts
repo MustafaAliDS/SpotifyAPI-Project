@@ -4,8 +4,8 @@ import request from "request";
 import dotenv from "dotenv";
 dotenv.config();
 
-const APP: Application = express();
-const PORT = process.env["PORT"]
+const server: Application = express();
+const PORT = process.env["PORT"];
 const CLIENT_ID = process.env["CLIENT_ID"];
 const CLIENT_SECERET = process.env["CLIENT_SECERET"];
 const RESPONSE_TYPE = "code";
@@ -14,15 +14,11 @@ const REDIRECT_URI = "http://localhost:8888/callback";
 const SCOPE =
   "user-read-recently-played user-read-email user-read-private user-read-recently-played user-read-playback-position user-read-playback-state ugc-image-upload";
 
-APP.get("/", (req: Request, res: Response) => {
+server.get("/", (_req: Request, res: Response) => {
   res.redirect("/login");
-  console.log(req);
-  console.log(CLIENT_ID);
-  console.log(PORT);
-  console.log(CLIENT_SECERET);
 });
 
-APP.get("/login", (req: Request, res: Response) => {
+server.get("/login", (req: Request, res: Response) => {
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -35,7 +31,7 @@ APP.get("/login", (req: Request, res: Response) => {
   req.body;
 });
 
-APP.get("/callback", (req: Request, res: Response) => {
+server.get("/callback", (req: Request, res: Response) => {
   const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
 
   let authOptions: {
@@ -64,10 +60,10 @@ APP.get("/callback", (req: Request, res: Response) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      let access_token: string = body.access_token;
-      let token_type: string = body.token_type;
-      let scope: string = body.scope;
-      let expires_in: string = body.expires_in;
+      let access_token = body.access_token;
+      let token_type = body.token_type;
+      let scope = body.scope;
+      let expires_in = body.expires_in;
 
       res.send({
         access_token: access_token,
@@ -79,6 +75,6 @@ APP.get("/callback", (req: Request, res: Response) => {
   });
 });
 
-APP.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Working on port ${PORT}`);
 });
