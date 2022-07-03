@@ -1,38 +1,36 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "overrides": [
-      {
-        "files": ["*.ts", "*.tsx"], 
-        "extends": [
-          "plugin:@typescript-eslint/recommended",
-          "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        ],
-        "parserOptions": {
-          "project": ["./tsconfig.json"]
-        }
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ],
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
       }
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    
-    "rules": { 
-        "@typescript-eslint/no-empty-interface": 2,
-        "@typescript-eslint/no-redundant-type-constituents": 2,
-        "@typescript-eslint/no-unsafe-assignment": 2,
-        "@typescript-eslint/no-unsafe-call": 2,
-        "@typescript-eslint/no-unsafe-member-access": 2,
-        "@typescript-eslint/no-unsafe-return": 2,
-        "@typescript-eslint/no-useless-empty-export": 2,
-        "@typescript-eslint/no-var-requires": 2,
-        "@typescript-eslint/prefer-nullish-coalescing": 2,
-        "@typescript-eslint/prefer-optional-chain": 2,
-        "@typescript-eslint/no-explicit-any": 2      }
-        
+    }
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+
+  "rules": {
+    "@typescript-eslint/no-empty-interface": 2,
+    "@typescript-eslint/no-redundant-type-constituents": 2,
+    "@typescript-eslint/no-unsafe-assignment": 2,
+    "@typescript-eslint/no-unsafe-call": 2,
+    "@typescript-eslint/no-unsafe-member-access": 2,
+    "@typescript-eslint/no-unsafe-return": 2,
+    "@typescript-eslint/no-useless-empty-export": 2,
+    "@typescript-eslint/no-var-requires": 2,
+    "@typescript-eslint/prefer-nullish-coalescing": 2,
+    "@typescript-eslint/prefer-optional-chain": 2,
+    "@typescript-eslint/no-explicit-any": 2
   }
+}
