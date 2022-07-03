@@ -34,7 +34,7 @@ server.get("/login", (req: Request, res: Response) => {
 server.get("/callback", (req: Request, res: Response) => {
   const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
 
-  let authOptions: {
+  const AUTH_OPTIONS: {
     url: string;
     form: {
       code: typeof req.query["code"];
@@ -58,18 +58,18 @@ server.get("/callback", (req: Request, res: Response) => {
     json: true,
   };
 
-  request.post(authOptions, function (error, response, body) {
+  request.post(AUTH_OPTIONS, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      let access_token = body.access_token;
-      let token_type = body.token_type;
-      let scope = body.scope;
-      let expires_in = body.expires_in;
+      const ACCESS_TOKEN: string = body.access_token;
+      const TOKEN_TYPE: string = body.token_type;
+      const SCOPE: string = body.scope;
+      const EXPIRES_IN: string = body.expires_in;
 
       res.send({
-        access_token: access_token,
-        token_type: token_type,
-        scope: scope,
-        expires_in: expires_in,
+        access_token: ACCESS_TOKEN,
+        token_type: TOKEN_TYPE,
+        scope: SCOPE,
+        expires_in: EXPIRES_IN,
       });
     }
   });

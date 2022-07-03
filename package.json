@@ -9,12 +9,12 @@
     "tsc": "tsc --noEmit --emitDeclarationOnly false",
     "build": "rimraf dist && npm run tsc",
     "preserve": "npm run build",
-    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/server.js\"",
+    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/src/server.js\"",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "test": "jest"
     "start": "cross-env NODE_ENV=production node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +37,10 @@
     "concurrently": "^7.2.2",
     "eslint": "^8.18.0",
     "jest": "^28.1.2",
+<<<<<<< HEAD
     "nodemon": "^2.0.18"
+=======
+    "nodemon": "^1.3.3"
+>>>>>>> b8b1764 (fix: prevent errors that are caused by installing jest, github actions, and eslintrc)
   }
 }

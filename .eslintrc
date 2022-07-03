@@ -13,6 +13,7 @@
         ],
         "parserOptions": {
           "project": ["./tsconfig.json"]
+          "project": ["SpotifyAPI-Project/tsconfig.json"],
         }
       }
     ],
