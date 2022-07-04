@@ -4,7 +4,7 @@ import request from "request";
 import dotenv from "dotenv";
 dotenv.config();
 
-const server: Application = express();
+export const server: Application = express();
 const PORT = 8888;
 const CLIENT_ID = "";
 const CLIENT_SECERET = "";
@@ -82,6 +82,8 @@ server.get("/callback", (req: Request, res: Response) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Working on port ${PORT}`);
-});
+if (process.env['NODE_ENV'] !== 'test') {
+  server.listen(PORT, () => {
+    console.log(`Working on port ${PORT}`);
+  });
+}
