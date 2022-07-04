@@ -5,14 +5,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const server: Application = express();
-const PORT = process.env["PORT"];
-const CLIENT_ID = process.env["CLIENT_ID"];
-const CLIENT_SECERET = process.env["CLIENT_SECERET"];
+const PORT = 8888;
+const CLIENT_ID = "";
+const CLIENT_SECERET = "";
 const RESPONSE_TYPE = "code";
 
 const REDIRECT_URI = "http://localhost:8888/callback";
 const SCOPE =
   "user-read-recently-played user-read-email user-read-private user-read-recently-played user-read-playback-position user-read-playback-state ugc-image-upload";
+
+interface body {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: string;
+}
 
 server.get("/", (_req: Request, res: Response) => {
   res.redirect("/login");
@@ -58,12 +65,12 @@ server.get("/callback", (req: Request, res: Response) => {
     json: true,
   };
 
-  request.post(AUTH_OPTIONS, function (error, response, body) {
+  request.post(AUTH_OPTIONS, function (error, response, body: body) {
     if (!error && response.statusCode === 200) {
-      const ACCESS_TOKEN: string = body.access_token;
-      const TOKEN_TYPE: string = body.token_type;
-      const SCOPE: string = body.scope;
-      const EXPIRES_IN: string = body.expires_in;
+      const ACCESS_TOKEN = body.access_token;
+      const TOKEN_TYPE = body.token_type;
+      const SCOPE = body.scope;
+      const EXPIRES_IN = body.expires_in;
 
       res.send({
         access_token: ACCESS_TOKEN,
