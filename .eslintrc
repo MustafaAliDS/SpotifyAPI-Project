@@ -31,6 +31,24 @@
     "@typescript-eslint/no-var-requires": 2,
     "@typescript-eslint/prefer-nullish-coalescing": 2,
     "@typescript-eslint/prefer-optional-chain": 2,
-    "@typescript-eslint/no-explicit-any": 2
+    "@typescript-eslint/no-explicit-any": 2,
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/no-confusing-non-null-assertion": 2,
+    "@typescript-eslint/no-require-imports": 2,
+    "camelcase": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "memberLike",
+        "modifiers": ["private"],
+        "format": ["camelCase"],
+        "leadingUnderscore": "require"
+      },
+  
+      {
+        "selector": "typeLike",
+        "format": ["PascalCase"]
+      }
+    ]
   }
 }
