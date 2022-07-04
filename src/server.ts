@@ -14,7 +14,7 @@ const REDIRECT_URI = "http://localhost:8888/callback";
 const SCOPE =
   "user-read-recently-played user-read-email user-read-private user-read-recently-played user-read-playback-position user-read-playback-state ugc-image-upload";
 
-interface body {
+interface Body {
   access_token: string;
   token_type: string;
   scope: string;
@@ -65,7 +65,7 @@ server.get("/callback", (req: Request, res: Response) => {
     json: true,
   };
 
-  request.post(AUTH_OPTIONS, function (error, response, body: body) {
+  request.post(AUTH_OPTIONS, function (error, response, body: Body) {
     if (!error && response.statusCode === 200) {
       const ACCESS_TOKEN = body.access_token;
       const TOKEN_TYPE = body.token_type;
