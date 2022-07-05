@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from "express";
 import querystring from "querystring";
 import request from "request";
 import * as dotenv from 'dotenv'
-dotenv.config();
+dotenv.config({path: '.env'});
 
 
 export const server: Application = express();
