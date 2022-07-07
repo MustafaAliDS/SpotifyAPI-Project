@@ -15,7 +15,7 @@ if (process.env['NODE_ENV'] !== 'test') {
     throw new Error('PORT is undefined');
   }
   else {
-    loginRouter.listen(PORT, () => {
+    server.listen(PORT, () => {
     console.log(`Working on port ${PORT}`);
   });
 }
