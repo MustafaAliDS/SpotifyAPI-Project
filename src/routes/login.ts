@@ -30,5 +30,5 @@ loginRouter.get("/", (_req: Request, res: Response) => {
     req.body;
   });
 
-  loginRouter.use('/callback', callbackRouter)
+  loginRouter.use('./callback', callbackRouter)
   export {loginRouter}; 
