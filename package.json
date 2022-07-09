@@ -9,10 +9,10 @@
     "tsc": "tsc --noEmit --emitDeclarationOnly false",
     "build": "rimraf dist && npm run tsc",
     "preserve": "npm run build",
-    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
+    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/src/server\"",
     "prestart": "npm run build",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --coverage"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --coverage",
+    "start": "cross-env NODE_ENV=production node dist/server"
   },
   "author": "",
   "license": "ISC",
