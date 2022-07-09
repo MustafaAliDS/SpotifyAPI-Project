@@ -72,9 +72,7 @@ loginRouter.get("/", (_req: Request, res: Response) => {
       },
       json: true,
     };
-  
-    console.log(typeof req.query["code"])
-  
+    
     request.post(AUTH_OPTIONS, function (error, response, body: Body) {
       if (!error && response.statusCode === 200) {
         const ACCESS_TOKEN = body.access_token;
