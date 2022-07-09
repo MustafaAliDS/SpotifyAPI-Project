@@ -1,5 +1,6 @@
-import { server } from "./server";
+import { server } from "./index";
 import supertest from 'supertest';
+
 
 const requestWithSupertest = supertest(server);
 
