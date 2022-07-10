@@ -1,0 +1,15 @@
+{
+  "entryFile": "src/server",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": ".",
+    "entryFile": "./src/app.ts",
+    "specVersion": 3
+  },
+  "routes": {
+    "basePath": "/",
+    "entryFile": "./src/app.ts",
+    "routesDir": "src/routes"
+  }
+}

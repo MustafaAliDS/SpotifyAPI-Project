@@ -6,13 +6,16 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "tsc": "tsc --noEmit --emitDeclarationOnly false",
-    "build": "rimraf dist && npm run tsc",
-    "preserve": "npm run build",
-    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/src/server\"",
+    "tsc": "tsc --noEmit --emitDeclarationOnly false --experimentalDecorators",
+    "tsc:watch": "tsc --noEmit --emitDeclarationOnly false --experimentalDecorators --watch",
+    "build": "rimraf dist && npx tsoa spec-and-routes && npm run tsc",
+    "predev": "npm run build",
+    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/src/app\"",
     "prestart": "npm run build",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --coverage",
-    "start": "cross-env NODE_ENV=production node dist/server"
+    "start": "cross-env NODE_ENV=production node dist/app",
+    "tsoa:spec": "npx tsoa spec",
+    "tsoa:routes": "npx tsoa routes"
   },
   "author": "",
   "license": "ISC",
