@@ -1,23 +1,20 @@
-import express, { Application } from "express";
-import { loginRouter } from '../routes/index'
-import * as dotenv from 'dotenv'
+import express, { Application, Request, Response } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import { loginRouter } from '../routes/index';
+import * as dotenv from 'dotenv';
+import { RegisterRoutes } from '../routes/routes';
 
-dotenv.config({path: '.env'});
+dotenv.config({ path: '.env' });
 
-export const { PORT } = process.env;
 export const server: Application = express();
 
+server.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => {
+  return res.send(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    swaggerUi.generateHTML(await import('../../swagger.json')),
+  );
+});
 
-server.use(loginRouter)
+RegisterRoutes(server);
 
-
-if (process.env['NODE_ENV'] !== 'test') {
-  if(PORT === undefined){
-    throw new Error('PORT is undefined');
-  }
-  else {
-    server.listen(PORT, () => {
-    console.log(`Working on port ${PORT}`);
-  });
-}
-}
+server.use(loginRouter);
