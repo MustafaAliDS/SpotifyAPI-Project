@@ -1,23 +1,12 @@
 import express, { Application } from "express";
 import { loginRouter } from '../routes/index'
 import * as dotenv from 'dotenv'
+import { RegisterRoutes } from "../routes/routes";
 
 dotenv.config({path: '.env'});
 
-export const { PORT } = process.env;
 export const server: Application = express();
 
+RegisterRoutes(server);
 
-server.use(loginRouter)
-
-
-if (process.env['NODE_ENV'] !== 'test') {
-  if(PORT === undefined){
-    throw new Error('PORT is undefined');
-  }
-  else {
-    server.listen(PORT, () => {
-    console.log(`Working on port ${PORT}`);
-  });
-}
-}
+server.use(loginRouter);
