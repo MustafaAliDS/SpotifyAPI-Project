@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
-import request from 'request';
 import querystring from 'querystring';
 
 const loginRouter = express.Router();
 
 import * as dotenv from 'dotenv';
+import { Body } from 'tsoa';
+import { connected } from 'process';
 dotenv.config({ path: '.env' });
 const { CLIENT_ID, CLIENT_SECERET } = process.env;
 
@@ -37,7 +38,7 @@ loginRouter.get('/login', (req: Request, res: Response) => {
   req.body;
 });
 
-loginRouter.get('/callback', (req: Request, res: Response) => {
+loginRouter.get('/callback', async async (req: Request, res: Response) => {
   if (CLIENT_ID === undefined) {
     throw new Error('CLIENT_ID is undefined');
   } else if (CLIENT_SECERET === undefined) {
@@ -68,21 +69,18 @@ loginRouter.get('/callback', (req: Request, res: Response) => {
       json: true,
     };
 
-    request.post(AUTH_OPTIONS, function (error, response, body: Body) {
-      if (!error && response.statusCode === 200) {
-        const ACCESS_TOKEN = body.access_token;
-        const TOKEN_TYPE = body.token_type;
-        const SCOPE = body.scope;
-        const EXPIRES_IN = body.expires_in;
-
-        res.send({
-          access_token: ACCESS_TOKEN,
-          token_type: TOKEN_TYPE,
-          scope: SCOPE,
-          expires_in: EXPIRES_IN,
-        });
-      }
-    });
+    const response = await fetch('/callback', AUTH_OPTIONS)
+      .then(res => res.json())
+      .then(json =>
+        json.stringify({
+          access_token: body.access_token,
+          token_type: body.token_type,
+          scope: body.scope,
+          expires_in: body.expires_in,
+        }),
+      )
+      .catch(err => console.log(err));
+    return await response.json();
   }
 });
 
