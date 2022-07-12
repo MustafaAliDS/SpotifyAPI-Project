@@ -69,6 +69,8 @@ loginRouter.get('/callback', (req: Request, res: Response) => {
       json: true,
     };
 
+    //test
+
     fetch('/callback', AUTH_OPTIONS)
       .then(res => res.json())
       .then(json =>
