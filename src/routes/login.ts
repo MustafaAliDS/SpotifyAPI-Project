@@ -38,7 +38,7 @@ loginRouter.get('/login', (req: Request, res: Response) => {
   req.body;
 });
 
-loginRouter.get('/callback', async async (req: Request, res: Response) => {
+loginRouter.get('/callback', (req: Request, res: Response) => {
   if (CLIENT_ID === undefined) {
     throw new Error('CLIENT_ID is undefined');
   } else if (CLIENT_SECERET === undefined) {
@@ -69,7 +69,7 @@ loginRouter.get('/callback', async async (req: Request, res: Response) => {
       json: true,
     };
 
-    const response = await fetch('/callback', AUTH_OPTIONS)
+    fetch('/callback', AUTH_OPTIONS)
       .then(res => res.json())
       .then(json =>
         json.stringify({
@@ -80,7 +80,6 @@ loginRouter.get('/callback', async async (req: Request, res: Response) => {
         }),
       )
       .catch(err => console.log(err));
-    return await response.json();
   }
 });
 
