@@ -4,8 +4,6 @@ import querystring from 'querystring';
 const loginRouter = express.Router();
 
 import * as dotenv from 'dotenv';
-import { Body } from 'tsoa';
-import { connected } from 'process';
 dotenv.config({ path: '.env' });
 const { CLIENT_ID, CLIENT_SECERET } = process.env;
 
@@ -38,7 +36,7 @@ loginRouter.get('/login', (req: Request, res: Response) => {
   req.body;
 });
 
-loginRouter.get('/callback', (req: Request, res: Response) => {
+loginRouter.get('/callback', (req: Request, res: Response, body: Body) => {
   if (CLIENT_ID === undefined) {
     throw new Error('CLIENT_ID is undefined');
   } else if (CLIENT_SECERET === undefined) {
@@ -46,6 +44,7 @@ loginRouter.get('/callback', (req: Request, res: Response) => {
   } else {
     const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
     const AUTH_OPTIONS: {
+      method: string;
       url: string;
       form: {
         code: typeof req.query['code'];
@@ -57,6 +56,7 @@ loginRouter.get('/callback', (req: Request, res: Response) => {
       };
       json: boolean;
     } = {
+      method: 'POST',
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: req.query['code'],
@@ -70,18 +70,19 @@ loginRouter.get('/callback', (req: Request, res: Response) => {
     };
 
     //test
-
-    fetch('/callback', AUTH_OPTIONS)
-      .then(res => res.json())
-      .then(json =>
-        json.stringify({
+    function getUserToken() {
+      try {
+        const response = fetch('/callback', AUTH_OPTIONS);
+        return response.parse({
           access_token: body.access_token,
           token_type: body.token_type,
           scope: body.scope,
           expires_in: body.expires_in,
-        }),
-      )
-      .catch(err => console.log(err));
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 });
 
