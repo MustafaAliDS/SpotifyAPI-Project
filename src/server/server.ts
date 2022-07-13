@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import { loginRouter } from '../routes/index';
 import * as dotenv from 'dotenv';
 import { RegisterRoutes } from '../routes/routes';
+import morgan from 'morgan';
 
 dotenv.config({ path: '.env' });
 
@@ -14,6 +15,8 @@ server.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => {
     swaggerUi.generateHTML(await import('../../swagger.json')),
   );
 });
+
+server.use(morgan('combined'));
 
 RegisterRoutes(server);
 

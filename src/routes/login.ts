@@ -84,8 +84,8 @@ loginRouter.get('/callback', (async (req: Request, res: Response) => {
         scope: SCOPE,
         expires_in: EXPIRES_IN,
       });
-    } catch {
-      res.status(500);
+    } catch (error) {
+      res.send(error);
     }
   }
 }) as RequestHandler);
