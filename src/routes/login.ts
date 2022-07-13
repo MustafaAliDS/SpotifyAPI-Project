@@ -1,5 +1,5 @@
-import express, { Request, Response } from 'express';
-import request from 'request';
+import express, { Request, Response, RequestHandler } from 'express';
+
 import querystring from 'querystring';
 
 const loginRouter = express.Router();
@@ -20,6 +20,12 @@ interface Body {
   expires_in: string;
 }
 
+async function fetchSpotifyToken<T>(init: RequestInit): Promise<T> {
+  const result = await fetch('https://accounts.spotify.com/api/token', init);
+
+  return result.json() as Promise<T>;
+}
+
 loginRouter.get('/', (_req: Request, res: Response) => {
   res.redirect('/login');
 });
@@ -37,53 +43,51 @@ loginRouter.get('/login', (req: Request, res: Response) => {
   req.body;
 });
 
-loginRouter.get('/callback', (req: Request, res: Response) => {
+loginRouter.get('/callback', (async (req: Request, res: Response) => {
   if (CLIENT_ID === undefined) {
     throw new Error('CLIENT_ID is undefined');
   } else if (CLIENT_SECERET === undefined) {
     throw new Error('CLIENT_SECERET is undefined');
   } else {
     const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
-    const AUTH_OPTIONS: {
-      url: string;
-      form: {
-        code: typeof req.query['code'];
-        redirect_uri: string;
-        grant_type: string;
-      };
-      headers: {
-        Authorization: string;
-      };
-      json: boolean;
-    } = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: req.query['code'],
-        redirect_uri: REDIRECT_URI,
-        grant_type: 'authorization_code',
-      },
-      headers: {
-        Authorization: `Basic ${Buffer.from(COMBINED_IDS).toString('base64')}`,
-      },
-      json: true,
-    };
 
-    request.post(AUTH_OPTIONS, function (error, response, body: Body) {
-      if (!error && response.statusCode === 200) {
-        const ACCESS_TOKEN = body.access_token;
-        const TOKEN_TYPE = body.token_type;
-        const SCOPE = body.scope;
-        const EXPIRES_IN = body.expires_in;
+    try {
+      const spotifyResponse = await fetchSpotifyToken<{ data: { body: Body } }>(
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(COMBINED_IDS).toString(
+              'base64',
+            )}`,
+          },
+          method: 'POST',
+          body: {
+            // @ts-expect-error not sure whats going on here
+            code: req.query['code'],
+            redirect_uri: REDIRECT_URI,
+            grant_type: 'authorization_code',
+          },
+        },
+      );
 
-        res.send({
-          access_token: ACCESS_TOKEN,
-          token_type: TOKEN_TYPE,
-          scope: SCOPE,
-          expires_in: EXPIRES_IN,
-        });
-      }
-    });
+      const {
+        data: { body },
+      } = spotifyResponse;
+
+      const ACCESS_TOKEN = body.access_token;
+      const TOKEN_TYPE = body.token_type;
+      const SCOPE = body.scope;
+      const EXPIRES_IN = body.expires_in;
+
+      res.send({
+        access_token: ACCESS_TOKEN,
+        token_type: TOKEN_TYPE,
+        scope: SCOPE,
+        expires_in: EXPIRES_IN,
+      });
+    } catch {
+      res.status(500);
+    }
   }
-});
+}) as RequestHandler);
 
 export { loginRouter };
