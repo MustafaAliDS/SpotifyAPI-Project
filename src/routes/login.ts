@@ -55,17 +55,14 @@ loginRouter.get('/callback', (async (req: Request, res: Response) => {
       const spotifyResponse = await fetchSpotifyToken<{ data: { body: Body } }>(
         {
           headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `Basic ${Buffer.from(COMBINED_IDS).toString(
               'base64',
             )}`,
           },
           method: 'POST',
-          body: {
-            // @ts-expect-error not sure whats going on here
-            code: req.query['code'],
-            redirect_uri: REDIRECT_URI,
-            grant_type: 'authorization_code',
-          },
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          body: `code=${req.query['code']}&redirect_uri=${REDIRECT_URI}&grant_type=authorization_code`,
         },
       );
 
@@ -86,6 +83,7 @@ loginRouter.get('/callback', (async (req: Request, res: Response) => {
       });
     } catch (error) {
       res.send(error);
+      throw new Error(JSON.stringify(error));
     }
   }
 }) as RequestHandler);
