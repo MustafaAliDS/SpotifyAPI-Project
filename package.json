@@ -12,7 +12,7 @@
     "predev": "npm run build",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/src/app\"",
     "prestart": "npm run build",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --coverage",
+    "test": "cross-env NODE_ENV=test DOTENV_CONFIG_PATH=.env.test jest --testTimeout=10000 --runInBand --coverage",
     "start": "cross-env NODE_ENV=production node dist/app",
     "tsoa:spec": "npx tsoa spec",
     "tsoa:routes": "npx tsoa routes"

@@ -5,6 +5,7 @@ import querystring from 'querystring';
 const loginRouter = express.Router();
 
 import * as dotenv from 'dotenv';
+import { fetchSpotifyToken } from './fetchSpotifyToken';
 dotenv.config({ path: '.env' });
 const { CLIENT_ID, CLIENT_SECERET } = process.env;
 
@@ -18,12 +19,6 @@ interface Body {
   token_type: string;
   scope: string;
   expires_in: string;
-}
-
-async function fetchSpotifyToken<T>(init: RequestInit): Promise<T> {
-  const result = await fetch('https://accounts.spotify.com/api/token', init);
-
-  return result.json() as Promise<T>;
 }
 
 loginRouter.get('/', (_req: Request, res: Response) => {
@@ -46,45 +41,30 @@ loginRouter.get('/login', (req: Request, res: Response) => {
 loginRouter.get('/callback', (async (req: Request, res: Response) => {
   if (CLIENT_ID === undefined) {
     throw new Error('CLIENT_ID is undefined');
-  } else if (CLIENT_SECERET === undefined) {
+  }
+
+  if (CLIENT_SECERET === undefined) {
     throw new Error('CLIENT_SECERET is undefined');
-  } else {
-    const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
+  }
 
-    try {
-      const spotifyResponse = await fetchSpotifyToken<{ data: { body: Body } }>(
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Basic ${Buffer.from(COMBINED_IDS).toString(
-              'base64',
-            )}`,
-          },
-          method: 'POST',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          body: `code=${req.query['code']}&redirect_uri=${REDIRECT_URI}&grant_type=authorization_code`,
-        },
-      );
+  const COMBINED_IDS = `${CLIENT_ID}:${CLIENT_SECERET}`;
 
-      const {
-        data: { body },
-      } = spotifyResponse;
+  try {
+    const spotifyResponse = await fetchSpotifyToken<{ data: { body: Body } }>({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${Buffer.from(COMBINED_IDS).toString('base64')}`,
+      },
+      method: 'POST',
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      body: `code=${req.query['code']}&redirect_uri=${REDIRECT_URI}&grant_type=authorization_code`,
+    });
 
-      const ACCESS_TOKEN = body.access_token;
-      const TOKEN_TYPE = body.token_type;
-      const SCOPE = body.scope;
-      const EXPIRES_IN = body.expires_in;
+    res.send(spotifyResponse);
+  } catch (error) {
+    res.send(error);
 
-      res.send({
-        access_token: ACCESS_TOKEN,
-        token_type: TOKEN_TYPE,
-        scope: SCOPE,
-        expires_in: EXPIRES_IN,
-      });
-    } catch (error) {
-      res.send(error);
-      throw new Error(JSON.stringify(error));
-    }
+    throw new Error(JSON.stringify(error));
   }
 }) as RequestHandler);
 
