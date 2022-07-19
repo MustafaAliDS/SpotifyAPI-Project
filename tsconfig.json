@@ -37,7 +37,9 @@
     "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
   },
   "include": [  
-    "src/**/*.ts"  
+    "src/**/*.ts",
+    "controllers/**/*.ts",
+
   ],  
   "exclude": [  
     "node_modules"  
