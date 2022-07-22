@@ -1,6 +1,5 @@
 import express, { Application, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import { loginRouter } from '../routes/index';
 import * as dotenv from 'dotenv';
 import { RegisterRoutes } from '../routes/routes';
 import morgan from 'morgan';
@@ -19,5 +18,3 @@ server.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => {
 server.use(morgan('combined'));
 
 RegisterRoutes(server);
-
-server.use(loginRouter);

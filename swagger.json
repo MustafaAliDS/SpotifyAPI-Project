@@ -5,7 +5,32 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
+		"schemas": {
+			"Body": {
+				"properties": {
+					"access_token": {
+						"type": "string"
+					},
+					"token_type": {
+						"type": "string"
+					},
+					"scope": {
+						"type": "string"
+					},
+					"expires_in": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"access_token",
+					"token_type",
+					"scope",
+					"expires_in"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
 		"securitySchemes": {}
 	},
 	"info": {
@@ -18,6 +43,43 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/callback": {
+			"get": {
+				"operationId": "Callback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Body"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"CallbackController"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/login": {
+			"get": {
+				"operationId": "Login",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"LoginController"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/metadata/{trackId}": {
 			"get": {
 				"operationId": "GetTrack",
